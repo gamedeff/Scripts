@@ -14,4 +14,4 @@ if "%HH:~,1%"=="0" set HH=%HH:~1,2%
 set MI=%time:~3,2%
 if "%MI:~,1%"=="0" set MI=%MI:~1,2%
 
-say_ru.bat "<rate absspeed="3">Текущее время: <emph>%HH%<t1><hr></emph> часов <emph>%MI%<t1><min></emph> минут</rate>"
+say_ru.bat "Текущее время: <rate absspeed="3"><emph>%HH%<t1><hr></emph> часов <emph>%MI%<t1><min></emph> минут</rate>"
