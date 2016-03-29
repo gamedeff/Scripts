@@ -8,7 +8,10 @@ setlocal
 
 set "url=https://p.ya.ru/kryvyi-rih"
 
-for %%I in ("%url%") do cscript /nologo /e:jscript "%~f0" "%url%"
+rem chcp 1251 >nul
+for /f "delims=" %%A in ('cscript /nologo /e:jscript "%~f0" "%url%"') do >nul chcp 1251& echo.%%A
+
+rem for %%I in ("%url%") do >nul chcp 1251& cscript /nologo /e:jscript "%~f0" "%url%"
 
 goto :EOF
 
@@ -17,6 +20,27 @@ goto :EOF
 function die(txt) {
     WSH.StdErr.WriteLine(txt.split(/\r?\n/).join(' '));
     WSH.Quit(1);
+}
+
+//utf8 to 1251 converter (1 byte format, RU/EN support only + any other symbols) by drgluck
+function utf8_decode (aa) {
+    var bb = '', c = 0;
+    for (var i = 0; i < aa.length; i++) {
+        c = aa.charCodeAt(i);
+        if (c > 127) {
+            if (c > 1024) {
+                if (c == 1025) {
+                    c = 1016;
+                } else if (c == 1105) {
+                    c = 1032;
+                }
+                bb += String.fromCharCode(c - 848);
+            }
+        } else {
+            bb += aa.charAt(i);
+        }
+    }
+    return bb;
 }
 
 var x=new ActiveXObject("MSXML2.ServerXMLHTTP");
