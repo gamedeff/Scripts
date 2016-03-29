@@ -14,14 +14,6 @@ goto :EOF
 
 :: JScript portion */
 
-function encode_utf8(s) {
-  return unescape(encodeURIComponent(s));
-}
-
-function decode_utf8(s) {
-  return decodeURIComponent(escape(s));
-}
-
 function die(txt) {
     WSH.StdErr.WriteLine(txt.split(/\r?\n/).join(' '));
     WSH.Quit(1);
@@ -42,22 +34,6 @@ for (var i = 20 * timeout; x.readyState != 4 && i >= 0; i--) {
 var HTMLDoc = new ActiveXObject("HTMLFile");
 HTMLDoc.write(x.responseText);
 
-var res = HTMLDoc.getElementsByClassName("today-forecast")[0].innerText + ", " +HTMLDoc.getElementsByClassName("temperature-wrapper")[0].innerText.replace("\n", "").replace("\r", "").replace("\n", "").replace("\r", "").replace("\u2009\u02DA", String.fromCharCode(176)).replace("м/с", "метра в секунду");
+var res = HTMLDoc.getElementsByClassName("today-forecast")[0].innerText + ", " +HTMLDoc.getElementsByClassName("temperature-wrapper")[0].innerText.replace("\n", "").replace("\r", "").replace("\n", "").replace("\r", "").replace("\u2009\u02DA", " \u00B0").replace("м/с", "метра в секунду");
 
-var fixedstring;
-
-try{
-    // If the string is UTF-8, this will work and not throw an error.
-    fixedstring=decodeURIComponent(escape(res));
-}catch(e){
-    // If it isn't, an error will be thrown, and we can asume that we have an ISO string.
-    fixedstring=res;
-}
-
-for (var i = 0; i < fixedstring.length; i++) {
-        c = fixedstring.charCodeAt(i);
-        WSH.Echo(c);
-}
-
-
-WSH.Echo(fixedstring);
+WSH.Echo(res);
