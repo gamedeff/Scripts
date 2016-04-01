@@ -4,9 +4,9 @@
 
 @echo off
 
-chcp 65001 >nul
-
 setlocal
+
+chcp 1251 >nul
 
 set /a y=%date:~6,4%&set /a m=1%date:~3,2%-100&set /a d=1%date:~0,2%-100
 set /a i=(%y%-1901)*365 + (%y%-1901)/4 + %d% + (!(%y% %% 4))*(!((%m%-3)^&16))
@@ -26,6 +26,18 @@ function die(txt) {
     WSH.Quit(1);
 }
 
+function strConv(txt, sourceCharset, destCharset)
+{
+    with(new ActiveXObject("ADODB.Stream"))
+    {
+        type=2, mode=3, charset=destCharset;
+        open();
+        writeText(txt);
+        position=0, charset=sourceCharset;
+        return readText();
+    }
+}
+
 var x=new ActiveXObject("MSXML2.ServerXMLHTTP");
 x.open("POST", "http://udarenieru.ru/desktop_1/ajax/datum.php", false);
 x.setRequestHeader('User-Agent','XMLHTTP/1.0');
@@ -39,4 +51,4 @@ for (var i = 20 * timeout; x.readyState != 4 && i >= 0; i--) {
 
 //if (!x.responseXML.hasChildNodes) die(x.responseText);
 
-WSH.Echo(eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');"));
+WSH.Echo(strConv(eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');"),"ibm866","windows-1251"));

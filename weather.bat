@@ -37,6 +37,6 @@ for (var i = 20 * timeout; x.readyState != 4 && i >= 0; i--) {
 var HTMLDoc = new ActiveXObject("HTMLFile");
 HTMLDoc.write(x.responseText);
 
-var res = HTMLDoc.getElementsByClassName("today-forecast")[0].innerText + ", " +HTMLDoc.getElementsByClassName("temperature-wrapper")[0].innerText.replace("\n", "").replace("\r", "").replace("\n", "").replace("\r", "").replace("\u2009\u02DA", " \u00B0");
+var res = HTMLDoc.getElementsByClassName("temperature-wrapper")[0].innerText.replace("\n", "").replace("\r", "").replace("\n", "").replace("\r", "").replace("\u2009\u02DA", " \u00B0") + ", " +  HTMLDoc.getElementsByClassName("today-forecast")[0].innerText.replace("Сегодня ", "");
 
 WSH.Echo(res.replace("/с", " в секунду"));
