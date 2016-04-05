@@ -2,7 +2,7 @@
 
 chcp 1251 >nul
 
-echo Курс валют:
+echo Курсы валют:
 
 call currency.bat USD UAH RUB
 call currency.bat EUR UAH
