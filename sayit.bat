@@ -1,13 +1,33 @@
 @echo off
 
-call say_date_ru.bat
+setlocal EnableDelayedExpansion
+
+set "txt="
+set NL=^
+
+
+chcp 1251 >nul
+
+for /f "delims=" %%A in ('daterus.bat') do set "txt=%%A"
+
 
 chcp 866 >nul
 
-call say_time_ru.bat
+for /f "delims=" %%A in ('timerus.bat') do (
+    set "z=%%A"
+    set z=!z:"='!
+    set "txt=!txt!!NL!!z!"
+)
+
 
 chcp 866 >nul
 
-call say_weather_ru.bat
+for /f "delims=" %%A in ('weather.bat') do set "txt=!txt!!NL!%%A"
 
-call say_my_currency_ru.bat
+
+chcp 1251 >nul
+
+for /f "delims=" %%A in ('my_currency.bat') do set "txt=!txt!!NL!%%A"
+
+
+say_ru.bat "!txt!"
