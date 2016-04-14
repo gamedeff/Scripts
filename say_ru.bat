@@ -8,4 +8,6 @@ echo.!toSay!
 endLocal
 @goto :eof */
 
+// WSH.Echo(WSH.Arguments(0));
+
 (v=new ActiveXObject('SAPI.SpVoice')).GetVoices()&&v.Speak('<lang langid="419"><volume level="3">' + WSH.Arguments(0) + '</volume></lang>');
