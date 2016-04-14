@@ -122,15 +122,24 @@ var currency_list = get("https://ru.wikipedia.org/wiki/Список_знаков_валют");
 var currency_frac_list = get("https://ru.wikipedia.org/wiki/Список_существующих_валют");
 
 
-var gas = get("http://www.oil-price.net/widgets/natural_gas_text/gen.php?lang=ru").replaceAll("document.writeln('", "").replaceAll("');", "").replaceAll("\\/", "/");
+//var gas = get("http://www.oil-price.net/widgets/natural_gas_text/gen.php?lang=ru").replaceAll("document.writeln('", "").replaceAll("');", "").replaceAll("\\/", "/");
+var commodities = get("http://www.oil-price.net/COMMODITIES/gen.php?lang=en").replaceAll("document.writeln('", "").replaceAll("');", "").replaceAll("\\/", "/");
 
 var HTMLDoc = new ActiveXObject("HTMLFile");
 
 //HTMLDoc.write(eval(gas));
-HTMLDoc.write(gas);
+HTMLDoc.write(commodities);
 
-var res = HTMLDoc.getElementsByTagName("td")[0].innerText.trim() + " - " + get_currency_name_morph(HTMLDoc.getElementsByTagName("td")[1].innerText, "USD", 0, currency_list, currency_frac_list) + " (" + HTMLDoc.getElementsByTagName("td")[2].innerText.trim().replace(".", ",") + ")";
+var res = [];
+var names = [ "Crude Oil", "Natural Gas", "Gasoline", "", "Gold", "Silver", "Copper" ];
+var names_ru = [ "Нефть", "Природный газ", "Бензин", "", "Зо-лото", "Серебро", "Медь" ];
+
+for (var i = 0; i < names.length; i++) {
+	if(names[i])
+		res[i] = HTMLDoc.getElementsByTagName("td")[i*3 + 0].innerText.trim().replace(names[i], names_ru[i]) + " - " + get_currency_name_morph(HTMLDoc.getElementsByTagName("td")[i*3 + 1].innerText, "USD", 0, currency_list, currency_frac_list) + " (" + HTMLDoc.getElementsByTagName("td")[i*3 + 2].innerText.trim().replace(".", ",") + "%)";
+}
+
  
  //WSH.Echo(res);
 
-WSH.Echo(strConv(res, "ibm866", "windows-1251"));
+WSH.Echo(strConv(res.join("\n"), "ibm866", "windows-1251"));
