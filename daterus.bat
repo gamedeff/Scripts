@@ -21,9 +21,21 @@ goto :EOF
 
 :: JScript portion */
 
-function die(txt) {
-    WSH.StdErr.WriteLine(txt.split(/\r?\n/).join(' '));
-    WSH.Quit(1);
+if(!String.prototype.trim) {
+	String.prototype.trim = function() {
+		return this.replace(/^\s+|\s+$/g,'');
+		}
+}
+
+if(!String.prototype.contains) {
+	String.prototype.contains = function(it) { return this.indexOf(it) != -1; };
+}
+
+if(!String.prototype.replaceAll) {
+	String.prototype.replaceAll = function(search, replacement) {
+		var target = this;
+		return target.split(search).join(replacement);
+	}
 }
 
 function strConv(txt, sourceCharset, destCharset)
@@ -36,6 +48,33 @@ function strConv(txt, sourceCharset, destCharset)
         position=0, charset=sourceCharset;
         return readText();
     }
+}
+
+function die(txt) {
+    WSH.StdErr.WriteLine(txt.split(/\r?\n/).join(' '));
+    WSH.Quit(1);
+}
+
+function get_obj(url)
+{
+	var x = new ActiveXObject("MSXML2.ServerXMLHTTP");
+	x.open("GET", url, false);
+	x.setRequestHeader('User-Agent','XMLHTTP/1.0');
+	x.send('');
+	var timeout = 60;
+	for (var i = 20 * timeout; x.readyState != 4 && i >= 0; i--) {
+		if (!i) die("Timeout error.");
+		WSH.Sleep(50)
+	};
+
+	//if (!x.responseXML.hasChildNodes) die(x.responseText);
+
+	return x;
+}
+
+function get(url)
+{
+	return get_obj(url).responseText;
 }
 
 var x=new ActiveXObject("MSXML2.ServerXMLHTTP");
@@ -51,4 +90,34 @@ for (var i = 20 * timeout; x.readyState != 4 && i >= 0; i--) {
 
 //if (!x.responseXML.hasChildNodes) die(x.responseText);
 
-WSH.Echo(strConv(eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');"),"ibm866","windows-1251"));
+var b = eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"b":"<span>') + 11).split('<\\/span>",')[0] + "');").slice(0, -8);
+var c = eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');");
+
+var w = get("https://ru.m.wikipedia.org/wiki/" + b.replace(" ", "_"));
+
+//WSH.Echo(strConv(w,"ibm866","windows-1251"));
+
+var HTMLDoc = new ActiveXObject("HTMLFile");
+
+HTMLDoc.write(w);
+
+WSH.Echo(strConv(HTMLDoc.getElementsByTagName("p")[1].innerText.replaceAll("года", "го-да").replace(b, c),"ibm866","windows-1251"));
+
+var headline = HTMLDoc.getElementsByTagName("ul");//HTMLDoc.getElementsByClassName("mw-headline");
+
+for(var i = 0; i < headline.length; i++) {
+	if(headline[i])// && headline[i].innerText.contains("1 Праздники"))
+	{
+		var a = headline[i];
+		//WSH.Echo(strConv(a.innerText,"ibm866","windows-1251"));
+
+		for(var k = 0; k < a.childNodes.length; k++) {
+			//if(a.childNodes[k])
+				//WSH.Echo(strConv(a.childNodes[k].innerText,"ibm866","windows-1251"));
+		}
+	}
+}
+
+//WSH.Echo(strConv(a[0].innerText,"ibm866","windows-1251"));
+
+//WSH.Echo(strConv(eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');"),"ibm866","windows-1251"));

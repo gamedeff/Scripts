@@ -6,18 +6,18 @@ set "txt="
 set NL=.^
 
 
-chcp 1251 >nul
-
-for /f "delims=" %%A in ('daterus.bat') do set "txt=%%A"
-
-
 chcp 866 >nul
 
 for /f "delims=" %%A in ('timerus.bat') do (
     set "z=%%A"
     set z=!z:"='!
-    set "txt=!txt!!NL!!z!"
+    set "txt=!z!"
 )
+
+
+chcp 1251 >nul
+
+for /f "delims=" %%A in ('daterus.bat') do set "txt=!txt!!NL!%%A"
 
 
 chcp 866 >nul
