@@ -103,21 +103,3 @@ HTMLDoc.write(w);
 
 WSH.Echo(strConv(HTMLDoc.getElementsByTagName("p")[1].innerText.replaceAll("года", "го-да").replace(b, c),"ibm866","windows-1251"));
 
-var headline = HTMLDoc.getElementsByTagName("ul");//HTMLDoc.getElementsByClassName("mw-headline");
-
-for(var i = 0; i < headline.length; i++) {
-	if(headline[i])// && headline[i].innerText.contains("1 Праздники"))
-	{
-		var a = headline[i];
-		//WSH.Echo(strConv(a.innerText,"ibm866","windows-1251"));
-
-		for(var k = 0; k < a.childNodes.length; k++) {
-			//if(a.childNodes[k])
-				//WSH.Echo(strConv(a.childNodes[k].innerText,"ibm866","windows-1251"));
-		}
-	}
-}
-
-//WSH.Echo(strConv(a[0].innerText,"ibm866","windows-1251"));
-
-//WSH.Echo(strConv(eval("unescape('" + x.responseText.substring(x.responseText.indexOf('"c":"<span>') + 11).replace('<\\/span>"}', "") + "');"),"ibm866","windows-1251"));
