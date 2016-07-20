@@ -8,4 +8,5 @@ rem nircmd.exe movecursor 0 10
 
 nircmd.exe sendkeypress lwin+c
 
-sayit.bat
+call sayit1.bat
+call sayit2.bat
