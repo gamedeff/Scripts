@@ -10,4 +10,4 @@ endLocal
 
 // WSH.Echo(WSH.Arguments(0));
 
-(v=new ActiveXObject('SAPI.SpVoice')).GetVoices()&&v.Speak('<lang langid="419"><volume level="3">' + WSH.Arguments(0) + '</volume></lang>');
+(v=new ActiveXObject('SAPI.SpVoice')).GetVoices()&&v.Speak('<lang langid="419"><volume level="200">' + WSH.Arguments(0) + '</volume></lang>');
